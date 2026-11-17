@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080d12">
+<title>Maringa Repurpose</title>
+<style>
+:root{--bg:#080d12;--panel:#101923;--panel2:#0c141c;--line:#203140;--cyan:#25d9f2;--muted:#91a4b5;--white:#f3f8fb}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 85% 0%,#102d3a 0,transparent 35%),var(--bg);color:var(--white);font:15px/1.5 Inter,system-ui,Arial,sans-serif}
+header{height:72px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 5vw;background:#080d12dd;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
+.brand{font-weight:900;letter-spacing:.08em}.brand span{color:var(--cyan)}.tag{color:var(--muted);font-size:12px}
+main{max-width:1120px;margin:0 auto;padding:42px 22px 70px}.hero{margin-bottom:28px}.eyebrow{color:var(--cyan);font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}
+h1{font-size:clamp(32px,5vw,54px);line-height:1.05;margin:10px 0 12px;letter-spacing:-.04em}.sub{color:var(--muted);max-width:680px;margin:0}
+.layout{display:grid;grid-template-columns:1.05fr .95fr;gap:20px}.card{background:linear-gradient(180deg,#121e29,#0d151e);border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 18px 55px #0003}
+h2{font-size:18px;margin:0 0 16px}.drop{border:1.5px dashed #3a6072;border-radius:14px;padding:28px 16px;text-align:center;background:#0a151e;cursor:pointer;transition:.2s}.drop:hover{border-color:var(--cyan);background:#0d2029}.drop strong{display:block;font-size:16px;margin:8px 0 3px}.drop small{color:var(--muted)}
+input[type=file]{display:none}.btn{border:0;border-radius:10px;padding:12px 16px;font-weight:800;background:var(--cyan);color:#041016;cursor:pointer}.btn:disabled{opacity:.4;cursor:not-allowed}.btn.secondary{background:#1b2b38;color:var(--white);border:1px solid #31495a}
+.controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}label{display:block;color:#b7c8d5;font-size:12px;font-weight:700;margin-bottom:7px}select{width:100%;background:#09131b;border:1px solid #2b4050;border-radius:9px;padding:12px;color:var(--white)}
+.preview{background:#05090d;border:1px solid var(--line);border-radius:14px;min-height:290px;display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--muted);position:relative}video{max-width:100%;max-height:420px;display:none}.placeholder{text-align:center;padding:20px}.status{margin-top:14px;padding:12px 14px;background:#0a141c;border:1px solid var(--line);border-radius:10px;color:var(--muted);font-size:13px;min-height:44px}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}.progress{height:7px;background:#1a2a36;border-radius:20px;margin-top:12px;overflow:hidden;display:none}.progress div{height:100%;width:0;background:var(--cyan);transition:width .2s}
+.note{font-size:12px;color:var(--muted);margin-top:14px}.formats{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.pill{border:1px solid #294353;border-radius:30px;padding:5px 10px;color:#c2d4df;font-size:11px}
+footer{text-align:center;color:#6f8494;font-size:12px;padding:24px;border-top:1px solid var(--line)}
+@media(max-width:760px){.layout{grid-template-columns:1fr}header{padding:0 18px}.tag{display:none}main{padding-top:28px}.card{padding:17px}}
+</style>
+</head>
+<body>
+<header><div><div class="brand">MARINGA <span>REPURPOSE</span></div><div class="tag">CREATE ONCE. REPURPOSE EVERYWHERE.</div></div><div class="pill">FREE BROWSER TOOL</div></header>
+<main>
+<section class="hero"><div class="eyebrow">Your content workspace</div><h1>Make one video.<br><span style="color:var(--cyan)">Fit every feed.</span></h1><p class="sub">Resize your videos for Shorts, Reels, TikTok and YouTube. Your video is processed on your device — it is not uploaded to a server.</p></section>
+<div class="layout">
+<section class="card">
+<h2>1. Choose your video</h2>
+<label class="drop" for="file"><div style="font-size:30px">＋</div><strong>Choose a video from your device</strong><small>MP4, MOV and other browser-supported video files</small></label>
+<input id="file" type="file" accept="video/*">
+<div id="fileInfo" class="status">No video selected yet.</div>
+<div class="controls">
+<div><label for="format">Output format</label><select id="format"><option value="9:16">Vertical — 9:16 (Shorts / Reels / TikTok)</option><option value="16:9">Landscape — 16:9 (YouTube)</option><option value="1:1">Square — 1:1 (Feed)</option></select></div>
+<div><label for="fit">Video fit</label><select id="fit"><option value="cover">Fill frame (crop edges)</option><option value="contain">Fit whole video (bars)</option></select></div>
+</div>
+<div class="actions"><button class="btn" id="process" disabled>Prepare video</button><button class="btn secondary" id="reset">Reset</button></div>
+<div class="progress" id="progress"><div id="bar"></div></div>
+<div class="status" id="status" aria-live="polite">Select a video to begin.</div>
+<p class="note">Free processing happens locally in your browser. Keep this tab open while exporting. Large videos may take time or exceed your device's memory.</p>
+</section>
+<section class="card">
+<h2>2. Preview & export</h2>
+<div class="preview"><div class="placeholder" id="placeholder"><div style="font-size:38px">▶</div><div>Your preview will appear here</div></div><video id="preview" controls playsinline></video></div>
+<div class="formats"><span class="pill">9:16 Vertical</span><span class="pill">16:9 Landscape</span><span class="pill">1:1 Square</span><span class="pill">No account required</span></div>
+<div class="actions"><button class="btn" id="download" disabled>Download processed video</button></div>
+<p class="note">Export format: WebM, depending on browser support. This first free version does not yet publish directly to social platforms or create AI clips/captions.</p>
+</section>
+</div>
+</main>
+<footer>© <span id="year"></span> Maringa Repurpose · Free prototype · Your files stay on your device</footer>
+<script>
+const fileInput=document.getElementById('file'), preview=document.getElementById('preview'), info=document.getElementById('fileInfo');
+const processBtn=document.getElementById('process'), downloadBtn=document.getElementById('download'), statusBox=document.getElementById('status');
+const placeholder=document.getElementById('placeholder'), progress=document.getElementById('progress'), bar=document.getElementById('bar');
+let sourceUrl=null, outputUrl=null, sourceFile=null, recorder=null, chunks=[];
+document.getElementById('year').textContent=new Date().getFullYear();
+function say(s){statusBox.textContent=s}
+function clearOutput(){if(outputUrl)URL.revokeObjectURL(outputUrl);outputUrl=null;downloadBtn.disabled=true}
+fileInput.addEventListener('change',()=>{
+ const f=fileInput.files[0]; if(!f)return;
+ if(!f.type.startsWith('video/')){say('Please choose a video file.');return}
+ sourceFile=f; if(sourceUrl)URL.revokeObjectURL(sourceUrl); clearOutput();
+ sourceUrl=URL.createObjectURL(f); preview.src=sourceUrl; preview.style.display='block'; placeholder.style.display='none';
+ info.textContent=`${f.name} · ${(f.size/1024/1024).toFixed(1)} MB`;
+ processBtn.disabled=false; say('Video ready. Choose a format and select Prepare video.');
+});
+document.getElementById('reset').addEventListener('click',()=>{
+ fileInput.value='';sourceFile=null;clearOutput();if(sourceUrl)URL.revokeObjectURL(sourceUrl);sourceUrl=null;
+ preview.removeAttribute('src');preview.load();preview.style.display='none';placeholder.style.display='block';info.textContent='No video selected yet.';
+ processBtn.disabled=true;progress.style.display='none';bar.style.width='0%';say('Select a video to begin.');
+});
+processBtn.addEventListener('click',async()=>{
+ if(!sourceFile)return; clearOutput(); processBtn.disabled=true; chunks=[]; say('Preparing video…');
+ const [w,h]=document.getElementById('format').value.split(':').map(Number);
+ const ratio=w/h, outW=ratio<1?720:ratio===1?720:1280, outH=Math.round(outW/ratio);
+ const canvas=document.createElement('canvas');canvas.width=outW;canvas.height=outH;
+ const ctx=canvas.getContext('2d'); const video=document.createElement('video');
+ video.src=sourceUrl;video.muted=true;video.playsInline=true;
+ try{await new Promise((res,rej)=>{video.onloadedmetadata=res;video.onerror=()=>rej(Error('This video could not be opened by your browser.'));video.load()});
+ const stream=canvas.captureStream(30);
+ const audioStream=preview.captureStream?preview.captureStream():null;
+ if(audioStream){const track=audioStream.getAudioTracks()[0];if(track)stream.addTrack(track)}
+ const mime=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'].find(t=>MediaRecorder.isTypeSupported(t))||'';
+ recorder=new MediaRecorder(stream,mime?{mimeType:mime}:undefined);
+ recorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};
+ const finished=new Promise(resolve=>recorder.onstop=resolve);
+ const fit=document.getElementById('fit').value;
+ let start=performance.now(), duration=video.duration;
+ function draw(){
+  if(video.paused||video.ended)return;
+  ctx.fillStyle='#080d12';ctx.fillRect(0,0,outW,outH);
+  const scale=fit==='cover'?Math.max(outW/video.videoWidth,outH/video.videoHeight):Math.min(outW/video.videoWidth,outH/video.videoHeight);
+  const dw=video.videoWidth*scale,dh=video.videoHeight*scale;
+  ctx.drawImage(video,(outW-dw)/2,(outH-dh)/2,dw,dh);
+  const pct=Math.min(100,(video.currentTime/duration)*100);bar.style.width=pct+'%';
+  requestAnimationFrame(draw);
+ }
+ progress.style.display='block';video.currentTime=0;await video.play();recorder.start(500);draw();
+ say('Processing in your browser. Please keep this page open.');
+ await new Promise(resolve=>{video.onended=resolve;video.onerror=resolve});
+ recorder.stop();video.pause();await finished;
+ const blob=new Blob(chunks,{type:recorder.mimeType||'video/webm'});
+ outputUrl=URL.createObjectURL(blob);downloadBtn.disabled=false;bar.style.width='100%';
+ say(`Finished! ${(blob.size/1024/1024).toFixed(1)} MB · Download your WebM video.`);
+ }catch(err){say('Could not process this video: '+err.message+'. Try a smaller MP4 in Chrome or Edge.')}
+ finally{processBtn.disabled=false}
+});
+downloadBtn.addEventListener('click',()=>{
+ if(!outputUrl)return;const a=document.createElement('a');a.href=outputUrl;
+ a.download=(sourceFile?.name.replace(/\.[^.]+$/,'')||'maringa-video')+'-repurposed.webm';a.click();
+});
+</script>
+</body></html>
